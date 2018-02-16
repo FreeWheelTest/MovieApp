@@ -28,8 +28,18 @@ namespace MovieApp.Context
             };
 
             var users = new List<User> {
-                new User {Email="john.appleseed@apple.com" },
-                new User {Email="joanna.appleseed@apple.com" },
+                new User { Email="john.appleseed@apple.com" },
+                new User { Email="joanna.appleseed@apple.com" },
+            };
+
+            var ratings = new List<Rating>
+            {
+                new Rating {MovieId = 1, UserId = 1, Score = 9},
+                new Rating {MovieId = 1, UserId = 2, Score = 7.5},
+                new Rating {MovieId = 2, UserId = 1, Score = 8.5},
+                new Rating {MovieId = 2, UserId = 2, Score = 7},
+                new Rating {MovieId = 3, UserId = 1, Score = 9.4},
+                new Rating {MovieId = 3, UserId = 2, Score = 8.6}
             };
 
             context.Genres.AddRange(genres);

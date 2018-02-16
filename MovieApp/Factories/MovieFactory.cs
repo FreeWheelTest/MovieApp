@@ -24,7 +24,13 @@ namespace MovieApp.Factories
             foreach(var movie in movies)
             {
                 var ratings = db.Ratings.Where(x => x.MovieId == movie.Id);
-                movie.AverageRating = ratings.Average(x => x.Score);
+                if (ratings.Count() > 0)
+                {
+                    movie.AverageRating = ratings.Average(x => x.Score);
+                } else
+                {
+                    movie.AverageRating = 0;
+                }
             }
 
             return movies.Count() > 0 ? movies : null;
