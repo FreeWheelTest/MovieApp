@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MovieApp.Interfaces
+﻿namespace MovieApp.Interfaces
 {
     public interface IRating
     {
+        int Id { get; set; }
         int MovieId { get; set; }
         int UserId { get; set; }
         double Score { get; set; }

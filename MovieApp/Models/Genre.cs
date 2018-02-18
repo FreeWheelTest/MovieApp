@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using MovieApp.Interfaces;
+using Newtonsoft.Json;
 
 namespace MovieApp.Models
 {
-    public class Genre : IGenre
+    public class Genre : EntityBase, IGenre
     {
-        [Key]
-        public int Id { get; set; }
+        [JsonProperty(Order = 2)]
         public string Name { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Movie> Movies { get; set; }
     }
 }

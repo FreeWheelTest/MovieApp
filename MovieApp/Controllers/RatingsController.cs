@@ -24,7 +24,8 @@ namespace MovieApp.Controllers
             _movieFactory = movieFactory;
             _userFactory = userFactory;
         }
-        
+
+        /*
         [HttpGet]
         [ResponseType(typeof(IRating))]
         public IHttpActionResult GetRatings()
@@ -32,8 +33,6 @@ namespace MovieApp.Controllers
             var ratings = _ratingFactory.GetRatings();
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, ratings));
         }
-
-        /*
         // GET: api/Ratings/5
         [HttpGet]
         [ResponseType(typeof(IRating))]
@@ -47,7 +46,6 @@ namespace MovieApp.Controllers
 
             return Ok(rating);
         }
-        */
 
         /// <summary>
         /// Update movie rating.
@@ -88,11 +86,12 @@ namespace MovieApp.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+        */
 
         /// <summary>
-        /// Create movie rating.
+        /// Create or update movie rating.
         /// </summary>
-        /// <remarks>Create movie rating.</remarks>
+        /// <remarks>Create or update movie rating.</remarks>
         /// <response code="200">OK</response>
         /// <response code="400">Bad Request</response>
         /// <response code="404">Not Found</response>

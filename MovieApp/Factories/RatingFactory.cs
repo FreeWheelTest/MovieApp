@@ -22,21 +22,8 @@ namespace MovieApp.Factories
             return db.Ratings.Find(id);
         }
 
-        public double GetRatingAverageByMovie(int id)
-        {
-            var ratings = db.Ratings.Where(x => x.MovieId == id);
-            if (ratings.Count() > 0)
-            {
-                return ratings.Average(x => x.Score);
-            } else
-            {
-                return 0;
-            }
-        }
-
         public bool PutRating(int id, IRating rating)
         {
-
             db.Entry(rating).State = EntityState.Modified;
 
             try
@@ -59,7 +46,17 @@ namespace MovieApp.Factories
 
         public bool PostRating(IRating rating)
         {
-            db.Ratings.Add(new Rating { MovieId = rating.MovieId, UserId = rating.UserId, Score = rating.Score });
+            var ratingDbo = db.Ratings.FirstOrDefault(x => x.MovieId == rating.MovieId && x.UserId == rating.UserId);
+
+            if (ratingDbo != null)
+            {
+                ratingDbo.Score = rating.Score;
+
+                db.Entry(ratingDbo).State = EntityState.Modified;
+            }
+            else {
+                db.Ratings.Add(new Rating { MovieId = rating.MovieId, UserId = rating.UserId, Score = rating.Score });
+            }
             db.SaveChanges();
 
             return true;

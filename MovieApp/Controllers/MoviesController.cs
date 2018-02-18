@@ -34,14 +34,61 @@ namespace MovieApp.Controllers
         [HttpGet]
         [Route("search")]
         [ResponseType(typeof(IEnumerable<IMovie>))]
-        public IHttpActionResult GetMoviesByCriteria(string criteria = "")
+        public IHttpActionResult GetMoviesByCriteria(string title = null, string genre = null, int? yearOfRelease = null)
         {
-            if(string.IsNullOrEmpty(criteria))
+            if(string.IsNullOrEmpty(title) && string.IsNullOrEmpty(genre) && string.IsNullOrEmpty(yearOfRelease.ToString()))
             {
                 return BadRequest();
             }
 
-            var movies = _movieFactory.GetMoviesByCriteria(criteria);
+            var movies = _movieFactory.GetMoviesByCriteria(title, genre, yearOfRelease);
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
+
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, movies));
+        }
+
+        /// <summary>
+        /// Gets the movie list by highest average rating.
+        /// </summary>
+        /// <remarks>Gets the movie list by highest average rating..</remarks>
+        /// <returns>Returns a movie list.</returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="404">Not Found</response>
+        [HttpGet]
+        [Route("top-five")]
+        [ResponseType(typeof(IEnumerable<IMovie>))]
+        public IHttpActionResult GetHighestTopFive()
+        {
+            var movies = _movieFactory.GetHighestTopFive();
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
+
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, movies));
+        }
+
+
+        /// <summary>
+        /// Gets the movie list by highest average rating.
+        /// </summary>
+        /// <remarks>Gets the movie list by highest average rating..</remarks>
+        /// <returns>Returns a movie list.</returns>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="404">Not Found</response>
+        [HttpGet]
+        [Route("user-top-five")]
+        [ResponseType(typeof(IEnumerable<IMovie>))]
+        public IHttpActionResult GetHighestTopFiveByUser(int userId)
+        {
+            var movies = _movieFactory.GetHighestTopFiveByUser(userId);
 
             if (movies == null)
             {
@@ -60,7 +107,7 @@ namespace MovieApp.Controllers
             var movies = _movieFactory.GetMovies();
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, movies));
         }
-        
+
         [HttpGet]
         [ResponseType(typeof(IMovie))]
         public IHttpActionResult GetMovie(int id)

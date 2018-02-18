@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using MovieApp.Interfaces;
 using MovieApp.Models;
@@ -17,23 +18,70 @@ namespace MovieApp.Factories
             return db.Movies.ToList();
         }
 
-        public IEnumerable<IMovie> GetMoviesByCriteria(string criteria)
+        public IEnumerable<IMovie> GetMoviesByCriteria(string title, string genre, int? yearOfRelease)
         {
-            var movies = db.Movies.Where(x => x.Title.Contains(criteria));
-
-            foreach(var movie in movies)
+            var movies = db.Movies.Where(x => x.Title.Contains(title) || x.YearOfRelease == yearOfRelease || x.Genres.Any(z => z.Name.Contains(genre))).ToList();
+            
+            foreach (var movie in movies)
             {
                 var ratings = db.Ratings.Where(x => x.MovieId == movie.Id);
                 if (ratings.Count() > 0)
                 {
-                    movie.AverageRating = ratings.Average(x => x.Score);
+                    movie.AverageRating = (Math.Round(ratings.Average(x => x.Score) * 2, MidpointRounding.AwayFromZero) / 2).ToString("#.#");
                 } else
                 {
-                    movie.AverageRating = 0;
+                    movie.AverageRating = "0";
                 }
             }
 
-            return movies.Count() > 0 ? movies : null;
+            return movies.Count() > 0 ? movies.OrderBy(x => x.Title).OrderByDescending(x => x.AverageRating) : null;
+        }
+
+        public IEnumerable<IMovie> GetHighestTopFive()
+        {
+            var movies = db.Movies.ToList();
+            
+            foreach (var movie in movies)
+            {
+
+                var ratings = db.Ratings.Where(x => x.MovieId == movie.Id);
+                if (ratings.Count() > 0)
+                {
+                    movie.AverageRating = ratings.Average(x => x.Score).ToString("#.#");
+                }
+                else
+                {
+                    movie.AverageRating = "0";
+                }
+            }
+
+            return movies.Count() > 0 ? movies.OrderBy(x => x.Title).OrderByDescending(x => x.AverageRating).Take(5) : null;
+        }
+
+        public IEnumerable<IMovie> GetHighestTopFiveByUser(int userId)
+        {
+            var users = db.Users.Find(userId);
+            if (users != null)
+            {
+
+                var movies = db.Movies.ToList();
+
+                foreach (var movie in movies)
+                {
+                    var ratings = db.Ratings.Where(x => x.MovieId == movie.Id && x.UserId == userId);
+                    if (ratings.Count() > 0)
+                    {
+                        movie.AverageRating = ratings.Average(x => x.Score).ToString("#.#");
+                    }
+                    else
+                    {
+                        movie.AverageRating = "0";
+                    }
+                }
+
+                return movies.Count() > 0 ? movies.OrderBy(x => x.Title).OrderByDescending(x => x.AverageRating).Take(5) : null;
+            }
+            return null;
         }
 
         public IMovie GetMovie(int id)

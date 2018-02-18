@@ -3,10 +3,8 @@ using MovieApp.Interfaces;
 
 namespace MovieApp.Models
 {
-    public class User : IUser
+    public class User : EntityBase, IUser
     {
-        [Key]
-        public int Id { get; set; }
         public string Email { get; set; }
     }
 }

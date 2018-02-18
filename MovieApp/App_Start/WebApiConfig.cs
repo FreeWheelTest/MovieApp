@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using MovieApp.App_Start;
 
 namespace MovieApp
@@ -25,7 +26,8 @@ namespace MovieApp
             
             
             config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
-            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             StructureMapWebApi.Start();

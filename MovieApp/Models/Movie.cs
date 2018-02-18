@@ -1,17 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using MovieApp.Interfaces;
 using System;
+using Newtonsoft.Json;
 
 namespace MovieApp.Models
 {
-    public class Movie : IMovie
+    public class Movie : EntityBase, IMovie
     {
-        [Key]
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public int YearOfRelease { get; set; }
-        public TimeSpan RunningTime { get; set; }
-        [ScaffoldColumn(false)]
-        public double AverageRating { get; set; }
+        [JsonProperty(Order = 2)]
+        public virtual string Title { get; set; }
+        [JsonProperty(Order = 3)]
+        public virtual int YearOfRelease { get; set; }
+        [JsonProperty(Order = 4)]
+        public virtual TimeSpan RunningTime { get; set; }
+        [NotMapped]
+        [JsonProperty(Order = 5)]
+        public virtual string AverageRating { get; set; }
+        [JsonProperty(Order = 6)]
+        public virtual ICollection<Genre> Genres { get; set; }
     }
 }

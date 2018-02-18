@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using MovieApp.Models;
 
 namespace MovieApp.Interfaces
 {
@@ -10,6 +8,5 @@ namespace MovieApp.Interfaces
         string Title { get; set; }
         int YearOfRelease { get; set; }
         TimeSpan RunningTime { get; set; }
-        double AverageRating { get; set; }
     }
 }
